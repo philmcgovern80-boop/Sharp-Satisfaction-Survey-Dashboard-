@@ -1,4 +1,4 @@
-const url = "https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/<YOUR_SHEET_ID>/gviz/tq?tqx=out:json";
+const url = "https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/1fAVab8nrLB9Ee_Y4tAj0ynto9bqkRhJeTGmbhDvlcp8/gviz/tq?tqx=out:json";
 const statusBanner = document.getElementById('status-banner');
 const avgScoreEl = document.getElementById('average-score');
 const lowScoreBanner = document.getElementById('low-score-banner');
