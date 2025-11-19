@@ -1,10 +1,12 @@
-# Satisfaction Dashboard
+# Satisfaction Dashboard (Fixed Version)
 
 ## Features
 - Dark theme dashboard
 - Live Google Sheets data via CORS proxy
 - Status banner (Live vs Fallback)
 - Low-score alerts (banner + modal)
+- Modal fixes: close button, outside click, ESC key
+- Smooth fade-in/out transitions
 - Average score display
 - Historical trend chart (Chart.js)
 - Score distribution chart (Chart.js)
