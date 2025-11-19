@@ -1,7 +1,7 @@
 // Fetch data from Google Sheets
 async function fetchData() {
     const sheetId = '<YOUR_SHEET_ID>';
-    const url = `https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/1fAVab8nrLB9Ee_Y4tAj0ynto9bqkRhJeTGmbhDvlcp8/gviz/tq?tqx=out:csv`;
+    const url = `https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
     const response = await fetch(url);
     const text = await response.text();
     return parseCSV(text);
