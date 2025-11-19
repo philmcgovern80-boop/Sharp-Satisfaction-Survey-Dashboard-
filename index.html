@@ -1,52 +1,32 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html>
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <title>Executive Dashboard - Advanced Analytics</title>
-    <link rel='stylesheet' href='style.css'>
-    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Executive Dashboard</h1>
-        <p>Enhanced with Advanced Analytics</p>
-    </header>
-
-    <section id='summary'>
-        <h2>Executive Summary</h2>
-        <div id='summary-cards'></div>
-    </section>
-
-    <section id='filters'>
-        <h3>Filters</h3>
-        <input type='date' id='startDate'>
-        <input type='date' id='endDate'>
-        <select id='questionFilter'></select>
-        <button onclick='applyFilters()'>Apply</button>
-    </section>
-
-    <section id='charts'>
-        <h2>Charts</h2>
-        <canvas id='trendChart'></canvas>
-        <canvas id='correlationChart'></canvas>
-    </section>
-
-    <section id='heatmap'>
+    <h1>Executive Dashboard Enhanced with Advanced Analytics</h1>
+    <div class="filters">
+        <input type="date" id="startDate">
+        <input type="date" id="endDate">
+        <button onclick="applyFilters()">Apply</button>
+    </div>
+    <div class="charts">
         <h2>Performance Heatmap</h2>
-        <div id='heatmapGrid'></div>
-    </section>
-
-    <section id='riskIndex'>
+        <div id="heatmapGrid" class="heatmap-grid"></div>
         <h2>Risk Index</h2>
-        <canvas id='riskChart'></canvas>
-    </section>
-
-    <section id='export'>
-        <button onclick='exportCSV()'>Export CSV</button>
-        <button onclick='exportPDF()'>Export PDF</button>
-    </section>
-
-    <script src='script.js'></script>
+        <div id="riskIndex"></div>
+        <h2>Correlation Analysis</h2>
+        <canvas id="correlationChart"></canvas>
+        <h2>Trend Insights</h2>
+        <canvas id="trendChart"></canvas>
+    </div>
+    <div class="export">
+        <button onclick="exportCSV()">Export CSV</button>
+        <button onclick="exportPDF()">Export PDF</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
