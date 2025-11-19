@@ -1,15 +1,11 @@
-# Satisfaction Dashboard (Fixed Version)
+# Executive Satisfaction Dashboard
 
 ## Features
-- Dark theme dashboard
-- Live Google Sheets data via CORS proxy
-- Status banner (Live vs Fallback)
-- Low-score alerts (banner + modal)
-- Modal fixes: close button, outside click, ESC key
-- Smooth fade-in/out transitions
-- Average score display
-- Historical trend chart (Chart.js)
-- Score distribution chart (Chart.js)
+- Dark theme, responsive layout
+- Executive summary cards (average score, low-score count, top/bottom questions)
+- Scrollable table of all survey responses
+- Interactive filters (question and date range)
+- Chart.js charts for overall trend and per-question trends
 - Fallback sample data with notification
 
 ## Setup

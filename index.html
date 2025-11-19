@@ -3,35 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satisfaction Dashboard</title>
+    <title>Executive Satisfaction Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
-        <h1>Satisfaction Dashboard</h1>
+        <h1>Executive Satisfaction Dashboard</h1>
         <div id="status-banner" class="banner">Loading data...</div>
-        <div id="average-score" class="average-score">Average Score: --</div>
-        <div id="low-score-banner" class="low-score-banner hidden">Low scores detected! <button onclick="showModal()">View Details</button></div>
     </header>
 
+    <!-- Executive Summary Cards -->
+    <section class="summary-cards">
+        <div class="card" id="avg-score-card">Average Score: --</div>
+        <div class="card" id="low-score-card">Low Scores: --</div>
+        <div class="card" id="top-questions-card">Top Questions: --</div>
+        <div class="card" id="bottom-questions-card">Bottom Questions: --</div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+        <label for="questionFilter">Filter by Question:</label>
+        <select id="questionFilter"></select>
+        <label for="dateFilter">Filter by Date Range:</label>
+        <input type="date" id="startDate"> to <input type="date" id="endDate">
+        <button onclick="applyFilters()">Apply Filters</button>
+    </section>
+
+    <!-- Charts -->
     <main>
         <section>
-            <canvas id="trendChart"></canvas>
+            <canvas id="overallTrendChart"></canvas>
         </section>
         <section>
-            <canvas id="distributionChart"></canvas>
+            <canvas id="questionTrendChart"></canvas>
         </section>
     </main>
 
-    <!-- Modal for low score details -->
-    <div id="lowScoreModal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close" onclick="hideModal()">&times;</span>
-            <h2>Low Score Details</h2>
-            <ul id="low-score-list"></ul>
-        </div>
-    </div>
+    <!-- Table of all questions -->
+    <section class="table-section">
+        <h2>All Survey Responses</h2>
+        <table id="responsesTable">
+            <thead>
+                <tr id="tableHeader"></tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </section>
 
     <script src="script.js"></script>
 </body>
