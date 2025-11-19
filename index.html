@@ -16,7 +16,7 @@
     <!-- Executive Summary Cards -->
     <section class="summary-cards">
         <div class="card" id="avg-score-card">Average Score: --</div>
-        <div class="card" id="low-score-card">Low Scores: --</div>
+        <div class="card clickable" id="risk-card" onclick="showRiskModal()">Risks: --</div>
         <div class="card" id="top-questions-card">Top Questions: --</div>
         <div class="card" id="bottom-questions-card">Bottom Questions: --</div>
     </section>
@@ -50,6 +50,24 @@
             <tbody id="tableBody"></tbody>
         </table>
     </section>
+
+    <!-- Risk Modal -->
+    <div id="riskModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="hideRiskModal()">&times;</span>
+            <h2>Low Score Risks</h2>
+            <ul id="risk-list"></ul>
+        </div>
+    </div>
+
+    <!-- Question Drill-Down Modal -->
+    <div id="questionModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="hideQuestionModal()">&times;</span>
+            <h2 id="question-title">Question Details</h2>
+            <ul id="question-details"></ul>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

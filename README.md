@@ -1,11 +1,12 @@
-# Executive Satisfaction Dashboard
+# Executive Satisfaction Dashboard (Pro Version)
 
 ## Features
-- Dark theme, responsive layout
-- Executive summary cards (average score, low-score count, top/bottom questions)
+- Light theme, responsive layout
+- Executive summary cards (average score, risk card with drill-down)
+- Risk drill-down: click risk card → see questions → click question → see low-score responses
 - Scrollable table of all survey responses
-- Interactive filters (question and date range)
-- Chart.js charts for overall trend and per-question trends
+- Interactive filters (question and date range placeholders)
+- Chart.js charts for overall trend
 - Fallback sample data with notification
 
 ## Setup
