@@ -3,209 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Survey Dashboard</title>
+    <title>Satisfaction Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="p-4">
-    <div class="container">
-        <h1 class="mb-4">Survey Dashboard</h1>
-        <div class="row mb-4">
-            <div class="col-md-3"><strong>Avg Score:</strong> <span id="avgScore">Loading...</span></div>
-            <div class="col-md-3"><strong>Total Responses:</strong> <span id="totalResponses">Loading...</span></div>
-            <div class="col-md-3"><strong>Completion Rate:</strong> <span id="completionRate">Loading...</span></div>
-            <div class="col-md-3"><strong>NPS:</strong> <span id="npsScore">Loading...</span></div>
-        </div>
+<body>
+    <header>
+        <h1>Satisfaction Dashboard</h1>
+        <div id="status-banner" class="banner">Loading data...</div>
+        <div id="average-score" class="average-score">Average Score: --</div>
+        <div id="low-score-banner" class="low-score-banner hidden">Low scores detected! <button onclick="showModal()">View Details</button></div>
+    </header>
 
-        <select id="filterSelect" class="form-select mb-3" onchange="applyFilter()">
-            <option value="all">All Questions</option>
-            <option value="sales">Sales</option>
-            <option value="service">Service</option>
-            <option value="overall">Overall</option>
-        </select>
+    <main>
+        <section>
+            <canvas id="trendChart"></canvas>
+        </section>
+        <section>
+            <canvas id="distributionChart"></canvas>
+        </section>
+    </main>
 
-        <div class="row">
-            <div class="col-md-6">
-                <canvas id="questionChart" style="height:500px;"></canvas>
-            </div>
-            <div class="col-md-6">
-                <canvas id="trendChart" style="height:500px;"></canvas>
-            </div>
-        </div>
-
-        <h3 class="mt-4">Questions</h3>
-        <table class="table table-bordered">
-            <thead>
-                <tr><th>Question</th><th>Avg Score</th><th>Responses</th><th>Action</th></tr>
-            </thead>
-            <tbody id="questionTable">
-                <tr><td colspan="4">Loading data...</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="detailsModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body" id="modalBody"></div>
-            </div>
+    <!-- Modal for low score details -->
+    <div id="lowScoreModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="hideModal()">&times;</span>
+            <h2>Low Score Details</h2>
+            <ul id="low-score-list"></ul>
         </div>
     </div>
 
-    <script>
-        const url = "https://docs.google.com/spreadsheets/d/1fAVab8nrLB9Ee_Y4tAj0ynto9bqkRhJeTGmbhDvlcp8/gviz/tq?tqx=out:json";
-        let questionChart, trendChart, data;
-
-        async function fetchDataFromGoogleSheet() {
-            try {
-                const response = await fetch(url);
-                const text = await response.text();
-
-                if (!text.startsWith("google.visualization")) {
-                    throw new Error("Invalid response. Check if sheet is published and accessible.");
-                }
-
-                const json = JSON.parse(text.substr(47).slice(0, -2));
-                const cols = json.table.cols;
-                const rows = json.table.rows;
-
-                const questionData = [];
-                let totalResponses = rows.length;
-                let overallSum = 0, overallCount = 0;
-
-                cols.forEach((col, colIndex) => {
-                    if (col.type === "number") {
-                        let sum = 0, count = 0;
-                        rows.forEach(r => {
-                            const cell = r.c[colIndex];
-                            if (cell && typeof cell.v === "number") {
-                                sum += cell.v;
-                                count++;
-                            }
-                        });
-                        if (count > 0) {
-                            questionData.push({
-                                label: col.label,
-                                score: sum / count,
-                                responses: count
-                            });
-                            overallSum += sum;
-                            overallCount += count;
-                        }
-                    }
-                });
-
-                const avgScore = overallCount > 0 ? (overallSum / overallCount) : 0;
-
-                data = {
-                    avgScore,
-                    totalResponses,
-                    completionRate: 100,
-                    npsScore: "N/A",
-                    questions: questionData,
-                    trend: { labels: ["Jan", "Feb", "Mar"], scores: [4.1, 4.2, 4.3] }
-                };
-
-                updateDashboard(data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                useFallbackData();
-            }
-        }
-
-        function useFallbackData() {
-            data = {
-                avgScore: 8.5,
-                totalResponses: 10,
-                completionRate: 100,
-                npsScore: "N/A",
-                questions: [
-                    { label: "Overall Experience", score: 8.7, responses: 10 },
-                    { label: "Sales Engagement", score: 8.3, responses: 10 },
-                    { label: "Service Quality", score: 8.9, responses: 10 }
-                ],
-                trend: { labels: ["Jan", "Feb", "Mar"], scores: [8.1, 8.4, 8.7] }
-            };
-            updateDashboard(data);
-        }
-
-        function updateDashboard(data) {
-            document.getElementById('avgScore').innerText = data.avgScore.toFixed(1);
-            document.getElementById('totalResponses').innerText = data.totalResponses;
-            document.getElementById('completionRate').innerText = data.completionRate + "%";
-            document.getElementById('npsScore').innerText = data.npsScore;
-
-            if (!questionChart) {
-                questionChart = new Chart(document.getElementById('questionChart'), {
-                    type: 'bar',
-                    data: { labels: data.questions.map(q => q.label), datasets: [{ data: data.questions.map(q => q.score), backgroundColor: ['#007bff','#28a745','#ffc107','#17a2b8','#6f42c1','#fd7e14','#20c997','#6610f2'] }] },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 10 } } }
-                });
-            } else {
-                questionChart.data.labels = data.questions.map(q => q.label);
-                questionChart.data.datasets[0].data = data.questions.map(q => q.score);
-                questionChart.update();
-            }
-
-            if (!trendChart) {
-                trendChart = new Chart(document.getElementById('trendChart'), {
-                    type: 'line',
-                    data: { labels: data.trend.labels, datasets: [{ data: data.trend.scores, borderColor:'#17a2b8', backgroundColor:'rgba(23,162,184,0.2)', fill:true, tension:0.3 }] },
-                    options: { responsive: true, maintainAspectRatio: false }
-                });
-            }
-
-            const tableBody = document.getElementById('questionTable');
-            tableBody.innerHTML = data.questions.map(q => `
-                <tr>
-                    <td>${q.label}</td>
-                    <td>${q.score.toFixed(1)}</td>
-                    <td>${q.responses}</td>
-                    <td><button class="btn btn-sm btn-info" onclick="showDetails('${q.label}')">View</button></td>
-                </tr>
-            `).join('');
-        }
-
-        function applyFilter() {
-            const filter = document.getElementById('filterSelect').value;
-            let filteredQuestions = data.questions;
-
-            if (filter === 'sales') {
-                filteredQuestions = data.questions.filter(q => q.label.toLowerCase().includes('sales'));
-            } else if (filter === 'service') {
-                filteredQuestions = data.questions.filter(q => q.label.toLowerCase().includes('service'));
-            } else if (filter === 'overall') {
-                filteredQuestions = data.questions.filter(q => q.label.toLowerCase().includes('overall'));
-            }
-
-            questionChart.data.labels = filteredQuestions.map(q => q.label);
-            questionChart.data.datasets[0].data = filteredQuestions.map(q => q.score);
-            questionChart.update();
-
-            const tableBody = document.getElementById('questionTable');
-            tableBody.innerHTML = filteredQuestions.map(q => `
-                <tr>
-                    <td>${q.label}</td>
-                    <td>${q.score.toFixed(1)}</td>
-                    <td>${q.responses}</td>
-                    <td><button class="btn btn-sm btn-info" onclick="showDetails('${q.label}')">View</button></td>
-                </tr>
-            `).join('');
-        }
-
-        function showDetails(question) {
-            document.getElementById('modalTitle').innerText = question + " Details";
-            document.getElementById('modalBody').innerHTML = `<p>Details for ${question} will appear here.</p>`;
-            new bootstrap.Modal(document.getElementById('detailsModal')).show();
-        }
-
-        fetchDataFromGoogleSheet();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
