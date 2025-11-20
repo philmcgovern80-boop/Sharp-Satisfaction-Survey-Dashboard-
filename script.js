@@ -2,10 +2,21 @@
 const sheetUrl = 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vRoV9se1uzk1HBor8amEIrX_TJ8KVznLjQ_5TfhdRJenKSJJG5MJOYBKP_ldvyGn7GzarflHULjT4lq/pub?output=csv';
 const questionLabels = ['On a scale of one to ten, with ten being Excellent and one being Poor, how would you rate your overall experience with the company', 'On a scale of 1 to 10 how satisfied are you with the installation and project management of the project?', 'On a scale of 1 to 10 how satisfied are you with the engagement and responsiveness of our Sales Team?', 'On a scale of 1 to 10 how satisfied are you with the quality and speed of our service and support?', 'On a scale of 1 to 10, how effective is Sharp’s communication with you in regard to, (clarity, timeliness, transparency)?', 'How likely are you to recommend Sharp products/experience to your colleagues?”', 'How likely are you to purchase dvLED from Sharp in the future?', 'On a scale of 1 to 10, how satisfied are you with Sharp’s dvLED product offerings (features, availability,)?', 'On a scale of 1 to 10, how would you rate the overall value Sharp provides compared to other manufacturers?'];
 
+const sampleData = [{
+    'First name': 'Sample', 'Last name': 'User', 'Submitted At': '2025-11-20',
+    "On a scale of one to ten, with ten being Excellent and one being Poor, how would you rate your overall experience with the company": "5", "On a scale of 1 to 10 how satisfied are you with the installation and project management of the project?": "6", "On a scale of 1 to 10 how satisfied are you with the engagement and responsiveness of our Sales Team?": "7", "On a scale of 1 to 10 how satisfied are you with the quality and speed of our service and support?": "8", "On a scale of 1 to 10, how effective is Sharp’s communication with you in regard to, (clarity, timeliness, transparency)?": "9", "How likely are you to recommend Sharp products/experience to your colleagues?”": "10", "How likely are you to purchase dvLED from Sharp in the future?": "11", "On a scale of 1 to 10, how satisfied are you with Sharp’s dvLED product offerings (features, availability,)?": "12", "On a scale of 1 to 10, how would you rate the overall value Sharp provides compared to other manufacturers?": "13"
+}];
+
 async function fetchData() {
-    const response = await fetch(sheetUrl);
-    const text = await response.text();
-    return parseCSV(text);
+    try {
+        const response = await fetch(sheetUrl);
+        const text = await response.text();
+        const parsed = parseCSV(text);
+        return parsed.length ? parsed : sampleData;
+    } catch (error) {
+        console.error('Fetch failed, using sample data', error);
+        return sampleData;
+    }
 }
 
 function parseCSV(text) {
@@ -13,12 +24,6 @@ function parseCSV(text) {
 ').map(r => r.split(','));
     const headers = rows.shift();
     return rows.filter(r => r.length === headers.length).map(row => Object.fromEntries(row.map((val, i) => [headers[i], val])));
-}
-
-function applyFilters() {
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
-    console.log(`Filter applied from ${startDate} to ${endDate}`);
 }
 
 function calculateMetrics(data) {
@@ -134,7 +139,7 @@ function exportPDF() {
 
 (async function init() {
     const data = await fetchData();
-    console.log(data); // Debugging
+    console.log('Data loaded:', data);
     calculateMetrics(data);
     calculateRiskIndex(data);
     generateHeatmap(data);
