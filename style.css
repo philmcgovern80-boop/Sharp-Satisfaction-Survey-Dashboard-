@@ -1,7 +1,7 @@
+
 body { font-family: Arial, sans-serif; margin: 20px; }
-.filters { margin-bottom: 20px; }
-.charts { display: grid; gap: 30px; }
-canvas { max-width: 800px; }
-.export { margin-top: 20px; }
-.heatmap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-.heatmap-cell { padding: 10px; color: #fff; text-align: center; border-radius: 4px; }
+header { text-align: center; margin-bottom: 20px; }
+#metric-cards { display: flex; gap: 20px; justify-content: center; }
+.metric-card { background: #f4f4f4; padding: 15px; border-radius: 8px; text-align: center; width: 150px; }
+.heatmap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.heatmap-cell { padding: 10px; color: #fff; text-align: center; border-radius: 4px; font-weight: bold; cursor: pointer; }

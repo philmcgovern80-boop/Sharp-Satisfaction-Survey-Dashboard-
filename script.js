@@ -1,12 +1,17 @@
+
+const sheetId = '1fAVab8nrLB9Ee_Y4tAj0ynto9bqkRhJeTGmbhDvlcp8';
+const questionLabels = ['On a scale of one to ten, with ten being Excellent and one being Poor, how would you rate your overall experience with the company', 'On a scale of 1 to 10 how satisfied are you with the installation and project management of the project?', 'On a scale of 1 to 10 how satisfied are you with the engagement and responsiveness of our Sales Team?', 'On a scale of 1 to 10 how satisfied are you with the quality and speed of our service and support?', 'On a scale of 1 to 10, how effective is Sharp’s communication with you in regard to, (clarity, timeliness, transparency)?', 'How likely are you to recommend Sharp products/experience to your colleagues?”', 'How likely are you to purchase dvLED from Sharp in the future?', 'On a scale of 1 to 10, how satisfied are you with Sharp’s dvLED product offerings (features, availability,)?', 'On a scale of 1 to 10, how would you rate the overall value Sharp provides compared to other manufacturers?', 'How would you describe your perception of Sharp’s dvLED solutions within the current market?  (e.g., quality, reliability, innovation, support)', 'Last name.1', 'Phone number', 'Email.1', 'Company.1'];
+
 async function fetchData() {
-    const url = `https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/1fAVab8nrLB9Ee_Y4tAj0ynto9bqkRhJeTGmbhDvlcp8/gviz/tq?tqx=out:csv`;
+    const url = `https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
     const response = await fetch(url);
     const text = await response.text();
     return parseCSV(text);
 }
 
 function parseCSV(text) {
-    const rows = text.split('\n').map(r => r.split(','));
+    const rows = text.split('
+').map(r => r.split(','));
     const headers = rows.shift();
     return rows.filter(r => r.length === headers.length).map(row => Object.fromEntries(row.map((val, i) => [headers[i], val])));
 }
@@ -17,16 +22,28 @@ function applyFilters() {
     console.log(`Filter applied from ${startDate} to ${endDate}`);
 }
 
+function calculateMetrics(data) {
+    let total = 0, count = 0;
+    data.forEach(row => {
+        questionLabels.forEach(q => {
+            const val = parseFloat(row[q]);
+            if (!isNaN(val)) { total += val; count++; }
+        });
+    });
+    const avgScore = (total / count).toFixed(2);
+    document.getElementById('metric-cards').innerHTML = `<div class='metric-card'><h3>Avg Score</h3><p>${avgScore}</p></div>`;
+}
+
 function calculateRiskIndex(data) {
     let lowScores = 0, totalScores = 0;
     data.forEach(row => {
-        for (let key in row) {
-            const val = parseFloat(row[key]);
+        questionLabels.forEach(q => {
+            const val = parseFloat(row[q]);
             if (!isNaN(val)) {
                 totalScores++;
                 if (val <= 6) lowScores++;
             }
-        }
+        });
     });
     const risk = ((lowScores / totalScores) * 100).toFixed(2);
     document.getElementById('riskIndex').textContent = `Risk Index: ${risk}%`;
@@ -35,8 +52,7 @@ function calculateRiskIndex(data) {
 function generateHeatmap(data) {
     const container = document.getElementById('heatmapGrid');
     container.innerHTML = '';
-    const questions = Object.keys(data[0]).filter(k => !isNaN(parseFloat(data[0][k])));
-    questions.forEach(q => {
+    questionLabels.forEach(q => {
         let sum = 0, count = 0;
         data.forEach(row => {
             const val = parseFloat(row[q]);
@@ -48,66 +64,60 @@ function generateHeatmap(data) {
         const color = avg >= 8 ? '#4caf50' : avg >= 6 ? '#ff9800' : '#f44336';
         cell.style.backgroundColor = color;
         cell.textContent = `${q}: ${avg}`;
+        cell.addEventListener('click', () => showDrillDown(q, data));
         container.appendChild(cell);
     });
 }
 
-function calculateCorrelation(data) {
-    const questions = Object.keys(data[0]).filter(k => !isNaN(parseFloat(data[0][k])));
-    const correlations = [];
-    for (let i = 0; i < questions.length; i++) {
-        for (let j = i + 1; j < questions.length; j++) {
-            const x = data.map(row => parseFloat(row[questions[i]]) || 0);
-            const y = data.map(row => parseFloat(row[questions[j]]) || 0);
-            const corr = pearson(x, y);
-            correlations.push({ pair: `${questions[i]} vs ${questions[j]}`, value: corr });
-        }
-    }
-    renderCorrelationChart(correlations);
-}
+function showDrillDown(question, data) {
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.top = '0';
+    modal.style.left = '0';
+    modal.style.width = '100%';
+    modal.style.height = '100%';
+    modal.style.backgroundColor = 'rgba(0,0,0,0.7)';
+    modal.style.display = 'flex';
+    modal.style.justifyContent = 'center';
+    modal.style.alignItems = 'center';
+    modal.style.zIndex = '9999';
 
-function pearson(x, y) {
-    const n = x.length;
-    const sumX = x.reduce((a,b) => a+b,0);
-    const sumY = y.reduce((a,b) => a+b,0);
-    const sumXY = x.reduce((a,b,i) => a+b*y[i],0);
-    const sumX2 = x.reduce((a,b) => a+b*b,0);
-    const sumY2 = y.reduce((a,b) => a+b*b,0);
-    return ((n*sumXY - sumX*sumY) / Math.sqrt((n*sumX2 - sumX**2)*(n*sumY2 - sumY**2))).toFixed(2);
-}
+    const content = document.createElement('div');
+    content.style.backgroundColor = '#fff';
+    content.style.padding = '20px';
+    content.style.borderRadius = '8px';
+    content.style.maxHeight = '80%';
+    content.style.overflowY = 'auto';
+    content.style.width = '400px';
 
-function renderCorrelationChart(correlations) {
-    const ctx = document.getElementById('correlationChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: correlations.map(c => c.pair),
-            datasets: [{ label: 'Correlation', data: correlations.map(c => c.value) }]
-        }
-    });
-}
+    const title = document.createElement('h3');
+    title.textContent = `Responses for: ${question}`;
+    content.appendChild(title);
 
-function renderTrendChart(ctx, data) {
-    const grouped = {};
+    const list = document.createElement('ul');
     data.forEach(row => {
-        const date = row['Submitted At'] ? row['Submitted At'].split(' ')[0] : 'Unknown';
-        if (!grouped[date]) grouped[date] = [];
-        const score = parseFloat(row[Object.keys(row)[0]]) || 0;
-        grouped[date].push(score);
+        const li = document.createElement('li');
+        li.textContent = `${row[question]} (Submitted: ${row['Submitted At'] || 'N/A'})`;
+        list.appendChild(li);
     });
-    const labels = Object.keys(grouped);
-    const values = labels.map(d => grouped[d].reduce((a,b)=>a+b,0)/grouped[d].length);
-    new Chart(ctx, {
-        type: 'line',
-        data: { labels: labels, datasets: [{ label: 'Trend', data: values }] }
-    });
+    content.appendChild(list);
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = 'Close';
+    closeBtn.style.marginTop = '10px';
+    closeBtn.addEventListener('click', () => modal.remove());
+    content.appendChild(closeBtn);
+
+    modal.appendChild(content);
+    document.body.appendChild(modal);
 }
 
 function exportCSV() {
     fetchData().then(data => {
         const headers = Object.keys(data[0]);
         const rows = data.map(row => headers.map(h => row[h]).join(','));
-        const csv = [headers.join(','), ...rows].join('\n');
+        const csv = [headers.join(','), ...rows].join('
+');
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -125,9 +135,7 @@ function exportPDF() {
 
 (async function init() {
     const data = await fetchData();
+    calculateMetrics(data);
     calculateRiskIndex(data);
     generateHeatmap(data);
-    calculateCorrelation(data);
-    const trendCtx = document.getElementById('trendChart').getContext('2d');
-    renderTrendChart(trendCtx, data);
 })();

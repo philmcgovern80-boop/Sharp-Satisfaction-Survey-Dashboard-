@@ -1,32 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 <head>
-    <title>Executive Dashboard - Advanced Analytics</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Executive Dashboard - Customer Satisfaction</title>
+    <link rel='stylesheet' href='style.css'>
+    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'></script>
 </head>
 <body>
-    <h1>Executive Dashboard Enhanced with Advanced Analytics</h1>
-    <div class="filters">
-        <input type="date" id="startDate">
-        <input type="date" id="endDate">
-        <button onclick="applyFilters()">Apply</button>
-    </div>
-    <div class="charts">
+    <header>
+        <h1>Executive Dashboard</h1>
+        <p>Comprehensive Analytics for Customer Satisfaction</p>
+    </header>
+
+    <section id='metrics'>
+        <h2>Key Metrics</h2>
+        <div id='metric-cards'></div>
+    </section>
+
+    <section id='filters'>
+        <h3>Filters</h3>
+        <input type='date' id='startDate'>
+        <input type='date' id='endDate'>
+        <button onclick='applyFilters()'>Apply</button>
+    </section>
+
+    <section id='heatmap'>
         <h2>Performance Heatmap</h2>
-        <div id="heatmapGrid" class="heatmap-grid"></div>
+        <div id='heatmapGrid' class='heatmap-grid'></div>
+    </section>
+
+    <section id='riskIndex'>
         <h2>Risk Index</h2>
-        <div id="riskIndex"></div>
+        <div id='riskIndex'></div>
+    </section>
+
+    <section id='correlation'>
         <h2>Correlation Analysis</h2>
-        <canvas id="correlationChart"></canvas>
+        <canvas id='correlationChart'></canvas>
+    </section>
+
+    <section id='trend'>
         <h2>Trend Insights</h2>
-        <canvas id="trendChart"></canvas>
-    </div>
-    <div class="export">
-        <button onclick="exportCSV()">Export CSV</button>
-        <button onclick="exportPDF()">Export PDF</button>
-    </div>
-    <script src="script.js"></script>
+        <canvas id='trendChart'></canvas>
+    </section>
+
+    <section id='export'>
+        <button onclick='exportCSV()'>Export CSV</button>
+        <button onclick='exportPDF()'>Export PDF</button>
+    </section>
+
+    <script src='script.js'></script>
 </body>
 </html>
