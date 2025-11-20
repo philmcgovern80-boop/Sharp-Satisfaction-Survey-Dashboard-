@@ -1,11 +1,9 @@
 # Executive Dashboard - Customer Satisfaction
 
 ## Features
-- Column-aware analytics for Sharp Customer Satisfaction data
+- Fetch live data from published Google Sheet
 - Key Metrics: Average Score, Risk Index
 - Heatmap with drill-down modal (includes identity fields)
-- Correlation Analysis (placeholder)
-- Trend Insights (placeholder)
 - Export to CSV and PDF
 
 ## Setup

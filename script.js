@@ -1,42 +1,26 @@
-// Published Google Sheet CSV URL with CORS proxy
+
 const sheetUrl = 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vRoV9se1uzk1HBor8amEIrX_TJ8KVznLjQ_5TfhdRJenKSJJG5MJOYBKP_ldvyGn7GzarflHULjT4lq/pub?output=csv';
+const questionLabels = ['On a scale of one to ten, with ten being Excellent and one being Poor, how would you rate your overall experience with the company', 'On a scale of 1 to 10 how satisfied are you with the installation and project management of the project?', 'On a scale of 1 to 10 how satisfied are you with the engagement and responsiveness of our Sales Team?', 'On a scale of 1 to 10 how satisfied are you with the quality and speed of our service and support?', 'On a scale of 1 to 10, how effective is Sharp’s communication with you in regard to, (clarity, timeliness, transparency)?', 'How likely are you to recommend Sharp products/experience to your colleagues?”', 'How likely are you to purchase dvLED from Sharp in the future?', 'On a scale of 1 to 10, how satisfied are you with Sharp’s dvLED product offerings (features, availability,)?', 'On a scale of 1 to 10, how would you rate the overall value Sharp provides compared to other manufacturers?'];
 
-// Exact numeric question columns from your sheet
-const questionLabels = [
-    'On a scale of one to ten, with ten being Excellent and one being Poor, how would you rate your overall experience with the company',
-    'On a scale of 1 to 10 how satisfied are you with the installation and project management of the project?',
-    'On a scale of 1 to 10 how satisfied are you with the engagement and responsiveness of our Sales Team?',
-    'On a scale of 1 to 10 how satisfied are you with the quality and speed of our service and support?',
-    'On a scale of 1 to 10, how effective is Sharp’s communication with you in regard to, (clarity, timeliness, transparency)?',
-    'How likely are you to recommend Sharp products/experience to your colleagues?”',
-    'How likely are you to purchase dvLED from Sharp in the future?',
-    'On a scale of 1 to 10, how satisfied are you with Sharp’s dvLED product offerings (features, availability,)?',
-    'On a scale of 1 to 10, how would you rate the overall value Sharp provides compared to other manufacturers?'
-];
-
-// Fetch data from Google Sheets
 async function fetchData() {
     const response = await fetch(sheetUrl);
     const text = await response.text();
     return parseCSV(text);
 }
 
-// Parse CSV into array of objects
 function parseCSV(text) {
-    const rows = text.split('\n').map(r => r.split(','));
+    const rows = text.split('
+').map(r => r.split(','));
     const headers = rows.shift();
-    return rows.filter(r => r.length === headers.length)
-               .map(row => Object.fromEntries(row.map((val, i) => [headers[i], val])));
+    return rows.filter(r => r.length === headers.length).map(row => Object.fromEntries(row.map((val, i) => [headers[i], val])));
 }
 
-// Apply date filters (placeholder for future logic)
 function applyFilters() {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     console.log(`Filter applied from ${startDate} to ${endDate}`);
 }
 
-// Calculate key metrics
 function calculateMetrics(data) {
     let total = 0, count = 0;
     data.forEach(row => {
@@ -46,12 +30,9 @@ function calculateMetrics(data) {
         });
     });
     const avgScore = (total / count).toFixed(2);
-    document.getElementById('metric-cards').innerHTML = `
-        <div class='metric-card'><h3>Avg Score</h3><p>${avgScore}</p></div>
-    `;
+    document.getElementById('metric-cards').innerHTML = `<div class='metric-card'><h3>Avg Score</h3><p>${avgScore}</p></div>`;
 }
 
-// Calculate Risk Index
 function calculateRiskIndex(data) {
     let lowScores = 0, totalScores = 0;
     data.forEach(row => {
@@ -67,7 +48,6 @@ function calculateRiskIndex(data) {
     document.getElementById('riskIndex').textContent = `Risk Index: ${risk}%`;
 }
 
-// Generate Heatmap with drill-down
 function generateHeatmap(data) {
     const container = document.getElementById('heatmapGrid');
     container.innerHTML = '';
@@ -88,7 +68,6 @@ function generateHeatmap(data) {
     });
 }
 
-// Drill-down modal
 function showDrillDown(question, data) {
     const modal = document.createElement('div');
     modal.style.position = 'fixed';
@@ -103,7 +82,7 @@ function showDrillDown(question, data) {
     modal.style.zIndex = '9999';
 
     const content = document.createElement('div');
-    = '#fff';
+    content.style.backgroundColor = '#fff';
     content.style.padding = '20px';
     content.style.borderRadius = '8px';
     content.style.maxHeight = '80%';
@@ -132,12 +111,12 @@ function showDrillDown(question, data) {
     document.body.appendChild(modal);
 }
 
-// Export CSV
 function exportCSV() {
     fetchData().then(data => {
         const headers = Object.keys(data[0]);
         const rows = data.map(row => headers.map(h => row[h]).join(','));
-        const csv = [headers.join(','), ...rows].join('\n');
+        const csv = [headers.join(','), ...rows].join('
+');
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -145,7 +124,6 @@ function exportCSV() {
     });
 }
 
-// Export PDF
 function exportPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -154,7 +132,6 @@ function exportPDF() {
     doc.save('dashboard_report.pdf');
 }
 
-// Initialize dashboard
 (async function init() {
     const data = await fetchData();
     console.log(data); // Debugging
