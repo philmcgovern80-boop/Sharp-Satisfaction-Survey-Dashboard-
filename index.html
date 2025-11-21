@@ -1,37 +1,45 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>Executive Dashboard - Customer Satisfaction</title>
-    <link rel='stylesheet' href='style.css'>
-    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Executive Dashboard - Customer Satisfaction</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Include Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Executive Dashboard</h1>
-        <p>Phase 1 & 2: Respondent Table, Position Summary, Trend Charts</p>
-    </header>
+  <header>
+    <h1>Executive Dashboard - Customer Satisfaction</h1>
+  </header>
 
-    <section id='position-summary'>
-        <h2>Position Summary</h2>
-        <div id='positionCards' class='card-grid'></div>
-    </section>
+  <section>
+    <h2>Position Summary</h2>
+    <div id="positionCards" class="card-grid"></div>
+  </section>
 
-    <section id='respondent-table'>
-        <h2>Respondent Details</h2>
-        <table id='respondentTable'>
-            <thead><tr><th>Name</th><th>Company</th><th>Position</th><th>Avg Score</th><th>Risk Index</th></tr></thead>
-            <tbody></tbody>
-        </table>
-    </section>
+  <section>
+    <h2>Respondent Details</h2>
+    <table id="respondentTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Company</th>
+          <th>Position</th>
+          <th>Avg Score</th>
+          <th>Risk Index</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
 
-    <section id='trend'>
-        <h2>Trend Charts</h2>
-        <canvas id='trendScoreChart'></canvas>
-        <canvas id='trendRiskChart'></canvas>
-    </section>
+  <section>
+    <h2>Trend Charts</h2>
+    id="trendScoreChart" width="400" height="200"></canvas>
+    <canvas id="trendRiskChart" width="400" height="200"></canvas>
+  </section>
 
-    <script src='script.js'></script>
+  <script src="script.js"></script>
 </body>
 </html>
