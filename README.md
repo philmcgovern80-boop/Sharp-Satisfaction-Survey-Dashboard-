@@ -1,13 +1,12 @@
-# Executive Dashboard - Customer Satisfaction
+# Executive Dashboard - Phase 1 & 2 Enhancements
 
 ## Features
-- LIVE DATA banner with scrolling animation
-- Fetch live data from published Google Sheet or fallback to sample data
-- Key Metrics: Average Score, Risk Index
-- Heatmap with drill-down modal (includes identity fields)
-- Export to CSV and PDF
+- Respondent Table: Name, Company, Position, Avg Score, Risk Index
+- Position Summary Cards: Avg Score, Avg Risk, Respondent Count
+- Trend Charts: Avg Score and Risk Index over time
+- Existing features retained: Heatmap, Drill-down, Export options
 
 ## Setup
 1. Enable CORS proxy: https://cors-anywhere.herokuapp.com and click 'Request temporary access'.
 2. Upload files to GitHub Pages.
-3. Dashboard auto-fetches data or uses sample fallback.
+3. Dashboard auto-fetches data from published Google Sheet.
