@@ -1,4 +1,4 @@
-const sheetUrl = 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/2PACX-1vRoV9se1uzk1HBor8amEIrX_TJ8KVznLjQ_5TfhdRJenKSJJG5MJOYBKP_ldvyGn7GzarflHULjT4lq/pub?output=csv';
+const sheetUrl = 'https://cors-anywhere.herokuapp.com/https://docs.google.com/spreadsheets/d/e/1bxIDnHQS2VtbTcdBwjQ06MtmPzlOISRw9V1NemHXWrc/pub?output=csv';
 
 const questionLabels = [
   'On a scale of one to ten, with ten being Excellent and one being Poor, how would you rate your overall experience with the company',
