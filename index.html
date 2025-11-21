@@ -1,45 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Executive Dashboard - Customer Satisfaction</title>
-  <link rel="stylesheet" href="style.css" />
-  <!-- Include Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Executive Dashboard - Customer Satisfaction</title>
+    <link rel='stylesheet' href='style.css'>
+    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'></script>
 </head>
 <body>
-  <header>
-    <h1>Executive Dashboard - Customer Satisfaction</h1>
-  </header>
+    <div class='banner'>LIVE DATA</div>
+    <header>
+        <h1>Executive Dashboard</h1>
+        <p>Comprehensive Analytics for Customer Satisfaction</p>
+    </header>
 
-  <section>
-    <h2>Position Summary</h2>
-    <div id="positionCards" class="card-grid"></div>
-  </section>
+    <section id='metrics'>
+        <h2>Key Metrics</h2>
+        <div id='metric-cards'></div>
+    </section>
 
-  <section>
-    <h2>Respondent Details</h2>
-    <table id="respondentTable">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Company</th>
-          <th>Position</th>
-          <th>Avg Score</th>
-          <th>Risk Index</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
+    <section id='filters'>
+        <h3>Filters</h3>
+        <input type='date' id='startDate'>
+        <input type='date' id='endDate'>
+        <button onclick='applyFilters()'>Apply</button>
+    </section>
 
-  <section>
-    <h2>Trend Charts</h2>
-    id="trendScoreChart" width="400" height="200"></canvas>
-    <canvas id="trendRiskChart" width="400" height="200"></canvas>
-  </section>
+    <section id='heatmap'>
+        <h2>Performance Heatmap</h2>
+        <div id='heatmapGrid' class='heatmap-grid'></div>
+    </section>
 
-  <script src="script.js"></script>
+    <section id='riskIndex'>
+        <h2>Risk Index</h2>
+        <div id='riskIndex'></div>
+    </section>
+
+    <section id='export'>
+        <button onclick='exportCSV()'>Export CSV</button>
+        <button onclick='exportPDF()'>Export PDF</button>
+    </section>
+
+    <script src='script.js'></script>
 </body>
 </html>
